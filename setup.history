@@ -31,3 +31,18 @@
    44  docker ps -a
    45  docker ps -l
    46  history 
+
+   git clone https://github.com/tianon/docker-brew-ubuntu-core.git
+   cd /docker-brew-ubuntu-core
+   ./update.sh
+   docker build -t="dockerfile/ubuntu18" /home/ubuntu/docker-brew-ubuntu-core/bionic
+   docker run -itd --rm dockerfile/ubuntu18 
+
+
+
+docker build -t="dockerfile/ubuntu" /home/ubuntu/ubuntu/
+docker run -itd --rm dockerfile/ubuntu
+
+
+docker build -t="dockerfile/ubuntu18" /home/ubuntu/docker-brew-ubuntu-core/bionic
+docker run -itd --rm dockerfile/ubuntu18 
