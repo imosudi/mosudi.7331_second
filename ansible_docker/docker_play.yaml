@@ -1,0 +1,73 @@
+- name: configuration play
+  hosts: miohosts
+  user: ubuntu
+  gather_facts: true
+
+
+  tasks:
+
+#  UPDATE THE UBUNTU LINUX SERVER 
+
+    - name: Only run "update_cache=yes" 
+      become: yes
+      become_method: sudo
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+
+    - name: Update all packages to the latest version
+      become: yes
+      become_method: sudo
+      apt:
+        upgrade: dist
+
+
+    #
+    # Restart instances specified by tag
+    #
+    - local_action:
+        module: ec2
+        hosts:  miohosts
+        state: restarted
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: miohosts
+        port: 22
+        delay: 60
+        timeout: 320
+        state: started
+      with_items : "{{ ec2.instances }}"
+      when: ec2 
+
+
+########################################################
+###INCREASE VIRTUAL RAM
+#We have got only 1GB RAM(AWS free tier), at least we have control over virtual RAM
+
+#INCREASE VIRTUAL RAM
+
+    - name: Create 1GB swap space
+      become: yes
+      become_method: sudo
+      command: dd if=/dev/zero of=/swpapace.swp bs=1024 count=1M
+      when: ansible_swaptotal_mb < 1
+
+#Setup the swap file 
+    - name: Setup the swap space
+      become: yes
+      become_method: sudo
+      command: mkswap /swpapace.swp
+      when: ansible_swaptotal_mb < 1
+ 
+#Edit /etc/fstab
+    - name: Add to fstab
+      become: yes
+      become_method: sudo
+      action: lineinfile dest=/etc/fstab regexp="swpapace.swp" line="/swpapace.swp none swap sw 0 0" state=present
+
+#Activate the swap space
+    - name: Activate the swap space
+      become: yes
+      become_method: sudo
+      command: swapon -a
