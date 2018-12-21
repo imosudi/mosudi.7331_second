@@ -1,0 +1,54 @@
+sudo ansible-playbook –i hosts deployment.yml -–ask-sudo-pass 
+
+
+ansible <HOST_GROUP> -m ping
+
+ssh -i "mio_key.pem" ubuntu@ec2-18-218-183-35.us-east-2.compute.amazonaws.com
+
+ansible ec2-18-218-183-35.us-east-2.compute.amazonaws.com -m ping
+
+
+ansible mio_test -m ping --private-key=~--extra-vars="ansible_ssh_private_key_file=
+
+ansible mio_test -m ping --extra-vars="ansible_ssh_private_key_file=mio_key.pem"
+
+
+
+
+mosud@serverafrica:/etc/ansible$ ansible miohosts -m ping 
+18.218.183.35 | FAILED! => {
+    "changed": false, 
+    "module_stderr": "Shared connection to 18.218.183.35 closed.\r\n", 
+    "module_stdout": "/bin/sh: 1: /usr/bin/python: not found\r\n", 
+    "msg": "MODULE FAILURE", 
+    "rc": 127
+}
+ec2-18-218-183-35.us-east-2.compute.amazonaws.com | FAILED! => {
+    "changed": false, 
+    "module_stderr": "Shared connection to ec2-18-218-183-35.us-east-2.compute.amazonaws.com closed.\r\n", 
+    "module_stdout": "/bin/sh: 1: /usr/bin/python: not found\r\n", 
+    "msg": "MODULE FAILURE", 
+    "rc": 127
+}
+
+ansible miohosts -m apt -a "name=python-2.7 state=present" -u username --become --become-user ubuntu [--ask-become-pass]
+
+ansible somegroup -m raw -a "docker ps -a" --ask-pass -K --become
+
+ansible miohosts -m raw -a "apt-get install python -y" --ask-pass -K --become
+
+raw: sudo bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qy python-minimal)"
+
+ansible mio_test -m 
+ virtualenv venv
+
+pip install 'docker-py>=1.7.0'
+pip install 'docker-compose>=1.7.0'
+
+#/etc/ansible/ansible.cfg or ~/.ansible.cfg
+[defaults]
+host_key_checking = False
+
+ansible miohosts -m raw -a "sudo apt-get install python -y"
+
+sudo ansible-playbook –i hosts docker_play.yml –ask-sudo-pass 

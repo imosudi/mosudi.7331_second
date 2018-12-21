@@ -1,0 +1,48 @@
+    1  sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install build-essential -y && sudo apt-get dist-upgrade -y
+    2  sudo apt install software-properties-common -y
+    3  wget -O- https://download.gluster.org/pub/gluster/glusterfs/3.12/rsa.pub | apt-key add -
+    4  sudo add-apt-repository ppa:gluster/glusterfs-3.12
+    5  sudo apt install glusterfs-server -y
+    6  sudo systemctl start glusterd
+    7  sudo systemctl enable glusterd
+   11  sudo reboot 
+   15  systemctl status glusterd
+   16  glusterfsd --version
+   17  sudo dd if=/dev/zero of=/swpapace.swp bs=1024 count=1M
+   18  mkswap /swpapace.swp
+   19  sudo mkswap /swpapace.swp
+   20  sudo vi /etc/fstab 
+   23  sudo chown 0600 /swpapace.swp 
+   24  sudo swapon -a
+   25  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - 
+   26  lsb_release -cd
+   27  sudo deb https://download.docker.com/linux/ubuntu bionic stable
+   28  sudo vi /etc/apt/sources.list
+   29  sudo apt-get  update 
+   30  sudo apt-get install docker-ce -y
+   32  sudo usermod -a -G docker $USER
+   33  exit
+   35  cd mio_images/
+   36  ls
+   37  cd ../ubuntu/
+   38  ls
+   39  docker run -itd --rm dockerfile/ubuntu
+   42  docker images
+   44  docker ps -a
+   45  docker ps -l
+   46  history 
+
+   git clone https://github.com/tianon/docker-brew-ubuntu-core.git
+   cd /docker-brew-ubuntu-core
+   ./update.sh
+   docker build -t="dockerfile/ubuntu18" /home/ubuntu/docker-brew-ubuntu-core/bionic
+   docker run -itd --rm dockerfile/ubuntu18 
+
+
+
+docker build -t="dockerfile/ubuntu" /home/ubuntu/ubuntu/
+docker run -itd --rm dockerfile/ubuntu
+
+
+docker build -t="dockerfile/ubuntu18" /home/ubuntu/docker-brew-ubuntu-core/bionic
+docker run -itd --rm dockerfile/ubuntu18 
